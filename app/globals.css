@@ -1,0 +1,410 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand-gold: #e1c254;
+  --brand-green: #004439;
+  --bg: #ffffff;
+  --fg: #0b0f0e;
+}
+
+@font-face {
+  font-family: "Cairo";
+  src: url("/fonts/cairo/Cairo-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cairo";
+  src: url("/fonts/cairo/Cairo-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cairo";
+  src: url("/fonts/cairo/Cairo-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cairo";
+  src: url("/fonts/cairo/Cairo-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cairo";
+  src: url("/fonts/cairo/Cairo-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+
+
+html,
+body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "Cairo", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* =====================
+   Animations
+   ===================== */
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee {
+  animation: marquee 28s linear infinite;
+  will-change: transform;
+}
+
+/* Pause on hover */
+.group:hover .marquee {
+  animation-play-state: paused;
+}
+
+
+/* Nice selection */
+::selection {
+  background: rgba(225, 194, 84, 0.35);
+}
+
+/* Subtle scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 68, 57, 0.35) transparent;
+}
+
+a {
+  color: inherit;
+}
+
+
+@keyframes fadeDepth {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.92);
+  }
+
+  20% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  80% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-20px) scale(1.05);
+  }
+}
+
+/* ✅ أنميشن خفيف على GPU (transform + opacity فقط) */
+.hero-fade-depth {
+  animation: heroFadeDepth 0.9s ease-out both;
+  will-change: transform, opacity;
+}
+
+@keyframes heroFadeDepth {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ✅ احترام إعدادات النظام لتقليل الحركة (أداء + UX) */
+@media (prefers-reduced-motion: reduce) {
+  .hero-fade-depth {
+    animation: none !important;
+  }
+}
+
+
+/* ===== Light Luxury Background ===== */
+.luxury-bg {
+  position: relative;
+  background:
+    radial-gradient(circle at 18% 25%,
+      rgba(225, 194, 84, 0.24),
+      transparent 46%),
+    radial-gradient(circle at 82% 72%,
+      rgba(0, 68, 57, 0.07),
+      transparent 52%),
+    linear-gradient(180deg,
+      #f7f6f3,
+      #ffffff);
+  background-size: 160% 160%;
+  animation: luxuryGradient 26s ease-in-out infinite;
+}
+
+@keyframes luxuryGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
+.luxury-glow::before {
+  content: "";
+  position: absolute;
+  inset: -25%;
+  background: radial-gradient(circle,
+      rgba(225, 194, 84, 0.10),
+      transparent 65%);
+  animation: glowMove 16s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes glowMove {
+  0% {
+    transform: translate3d(-2%, 1%, 0) scale(1);
+    opacity: 0.55;
+  }
+
+  50% {
+    transform: translate3d(2%, -1%, 0) scale(1.04);
+    opacity: 0.7;
+  }
+
+  100% {
+    transform: translate3d(-2%, 1%, 0) scale(1);
+    opacity: 0.55;
+  }
+}
+
+/* ===== Logo Shine (Lux) ===== */
+@keyframes logoShine {
+  0% {
+    transform: translateX(-120%) rotate(18deg);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.55;
+  }
+
+  55% {
+    opacity: 0.35;
+  }
+
+  100% {
+    transform: translateX(160%) rotate(18deg);
+    opacity: 0;
+  }
+}
+
+.logo-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.logo-shine::after {
+  content: "";
+  position: absolute;
+  inset: -40% -55%;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(225, 194, 84, 0.28),
+      rgba(255, 255, 255, 0.42),
+      rgba(225, 194, 84, 0.18),
+      transparent);
+  transform: translateX(-140%) rotate(18deg);
+  animation: logoShine 5.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-shine::after {
+    animation: none !important;
+  }
+}
+
+/* ===== 3D Ring Carousel ===== */
+.ring-stage {
+  perspective: 1100px;
+  transform-style: preserve-3d;
+}
+
+.ring {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.ring-card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform-style: preserve-3d;
+  will-change: transform;
+  backface-visibility: hidden;
+  contain: layout paint;
+}
+
+.ring-card-inner {
+  transform-style: preserve-3d;
+}
+
+@keyframes cardBump {
+  0% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(10px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* نسخة ثانية لإعادة تشغيل الأنيميشن بدون remount */
+@keyframes cardBump2 {
+  0% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(10px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ring-card-inner {
+    animation: none !important;
+  }
+}
+
+
+@keyframes ringFloat {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.ring-float {
+  animation: ringFloat 7.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ring-float {
+    animation: none !important;
+  }
+
+  .ring-card-inner {
+    animation: none !important;
+  }
+}
+
+.section-fade {
+  animation: sectionFade 0.9s ease-out both;
+}
+
+@keyframes sectionFade {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+  #px-layer-1,
+  #px-layer-2,
+  #px-layer-3 {
+    transform: none !important;
+  }
+}
+
+.luxury-text {
+  letter-spacing: 0.2px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* =====================
+   Mobile performance tweaks
+   ===================== */
+
+@media (max-width: 768px) {
+
+  /* الخلفية المتحركة جميلة، بس على الجوال ممكن تزيد الحمل على GPU */
+  .luxury-bg {
+    animation: none;
+    background-size: 100% 100%;
+  }
+
+  /* glow قبل قسم الهيرو: يقلل repaint على الأجهزة الضعيفة */
+  .luxury-glow::before {
+    display: none;
+  }
+}

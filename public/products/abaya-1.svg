@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1500" viewBox="0 0 1200 1500">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#004439"/>
+      <stop offset="1" stop-color="#e1c254"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#g)"/>
+  <g opacity="0.18">
+    <path d="M600 240 C520 260 470 330 470 420 C470 520 530 560 530 650
+             C530 780 430 830 430 980 C430 1160 510 1240 600 1280
+             C690 1240 770 1160 770 980 C770 830 670 780 670 650
+             C670 560 730 520 730 420 C730 330 680 260 600 240 Z" fill="#000"/>
+  </g>
+  <g>
+    <text x="80" y="120" font-family="ui-sans-serif,system-ui" font-size="54" fill="white" opacity="0.9">SENORA</text>
+    <text x="80" y="190" font-family="ui-sans-serif,system-ui" font-size="34" fill="white" opacity="0.75">Product image placeholder</text>
+    <text x="80" y="280" font-family="ui-sans-serif,system-ui" font-size="42" fill="white" opacity="0.95">Item #01</text>
+  </g>
+</svg>

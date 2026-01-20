@@ -1,0 +1,23 @@
+
+
+export type Product = {
+  id: string;
+  name: string;
+  price: number;
+  currency: string;
+  images: string[]; // paths inside /public
+  category: string;
+  tags: string[];
+  topSeller?: boolean;
+  trending?: boolean;
+  description: string;
+  details: { label: string; value: string }[];
+  options?: {
+  sizes?: string[];
+  colors?: { name: string; hex?: string }[];
+};
+
+};
+
+export const WHATSAPP_NUMBER = "+96349196001";
+
