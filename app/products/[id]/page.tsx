@@ -6,6 +6,7 @@ import Container from "@/components/Container";
 import Reveal from "@/components/Reveal";
 import { Badge, SecondaryButton } from "@/components/ui";
 import WhatsAppOrderButton from "@/components/WhatsAppOrderButton";
+import ProductImageCarousel from "@/components/ProductImageCarousel";
 
 import { fetchProductByIdServer } from "@/lib/api/product.server";
 import { fetchSettingsServer } from "@/lib/api/settings.server";
@@ -79,10 +80,7 @@ export default async function ProductPage({
     price: dto.price,
     currency: "USD",
 
-    images:
-      dto.images && dto.images.length > 0
-        ? dto.images
-        : ["/products/dress-1.svg"],
+    images: dto.images,
 
     category: "المنتجات",
 
@@ -105,12 +103,13 @@ export default async function ProductPage({
       colors,
     },
   };
-  const absoluteImage = (() => {
-    const img = product.images?.[0];
-    if (!img) return undefined;
-    if (img.startsWith("http://") || img.startsWith("https://")) return img;
-    return `${siteUrl}${img.startsWith("/") ? "" : "/"}${img}`;
-  })();
+  // console.log(dto);
+  // const absoluteImage = (() => {
+  //   const img = product.images?.[0].url;
+  //   if (!img) return undefined;
+  //   if (img.startsWith("http://") || img.startsWith("https://")) return img;
+  //   return `${siteUrl}${img.startsWith("/") ? "" : "/"}${img}`;
+  // })();
 
   return (
     <Container className="py-10">
@@ -131,11 +130,9 @@ export default async function ProductPage({
         <Reveal>
           <div className="overflow-hidden rounded-[28px] border border-black/5 bg-white shadow-soft">
             <div className="relative aspect-[4/5]">
-              <Image
-                src={product.images[0]}
+              <ProductImageCarousel
+                images={product.images}
                 alt={product.name}
-                fill
-                className="object-cover"
                 priority
               />
             </div>
@@ -200,7 +197,7 @@ export default async function ProductPage({
                 product={product as any}
                 whatsappNumber={settings.whatsapp}
                 siteUrl={siteUrl}
-                absoluteImage={absoluteImage}
+                // absoluteImage={absoluteImage}
               />
 
               <SecondaryButton href="/products">متابعة التسوّق</SecondaryButton>
@@ -213,4 +210,4 @@ export default async function ProductPage({
 }
 
 // ISR: regenerate product page every 1 hour
-export const revalidate = 3600;
+// export const revalidate = 60;

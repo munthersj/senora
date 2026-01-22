@@ -23,7 +23,7 @@ export const DEFAULT_SETTINGS: ShopSettings = {
 export async function fetchSettingsServer(): Promise<ShopSettings> {
   try {
     const dto = await serverGetJSON<Partial<ShopSettings>>("/settings", {
-      revalidate: 3600,
+      revalidate: 60,
       tags: ["settings"],
     });
 

@@ -14,7 +14,7 @@ export type HomeParams = {
  */
 export async function fetchHomeServer(
   params: HomeParams = {},
-  revalidateSeconds = 900
+  revalidateSeconds = 60
 ) {
   return serverGetJSON<HomeResponse>("/", {
     params,

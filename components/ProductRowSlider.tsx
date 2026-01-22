@@ -12,10 +12,8 @@ function toUIProduct(dto: ProductDTO): Product {
     price: dto.price,
     currency: "USD", // أو "AED" حسب مشروعك
     description: dto.description ?? "",
-    images:
-      dto.images && dto.images.length > 0
-        ? dto.images
-        : ["/products/dress-1.svg"],
+    images: dto.images,
+
     category: "فساتين",
     tags: dto.colors?.length ? dto.colors.slice(0, 6) : ["الأكثر مبيعاً"],
     details: [
@@ -51,7 +49,7 @@ function ArrowBtn({
         "rounded-full border border-black/10 bg-white/85 p-3 shadow-soft md:backdrop-blur",
         "transition hover:bg-white",
         dir === "left" ? "left-2" : "right-2",
-        className
+        className,
       )}
     >
       <span className="text-lg leading-none text-black/70">
@@ -124,7 +122,7 @@ export default function ProductRowSlider({
         className={cn(
           "flex gap-5 overflow-x-auto scroll-smooth",
           "px-4 md:px-12 py-2",
-          "no-scrollbar"
+          "no-scrollbar",
         )}
       >
         {uiProducts.map((p) => (

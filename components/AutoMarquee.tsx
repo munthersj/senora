@@ -7,18 +7,22 @@ import Link from "next/link";
 import { cn } from "@/lib/cn";
 
 const INTERVAL_MS = 6000;
-
+export type ImageDTO = {
+  id: number;
+  url: string;
+};
 type LatestProduct = {
   id: string;
   name: string;
   price: number;
   currency?: string; // من الباك غالباً مو موجود
-  images: string[]; // ممكن تكون فاضية
+  images: ImageDTO[]; // ممكن تكون فاضية
 };
 
-function getHeroImage(p?: { images?: string[] }) {
+function getHeroImage(p?: { images?: ImageDTO[] }) {
   const first = p?.images?.[0];
-  return first && first.length > 0 ? first : "/products/dress-1.svg";
+  console.log(first);
+  return first && first.url.length > 0 ? first.url : "/products/dress-1.svg";
 }
 
 export default function AutoMarquee({

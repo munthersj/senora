@@ -2,7 +2,12 @@
 const nextConfig = {
   images: {
     remotePatterns: [
-      // If later you host images on a CDN, add domains here.
+      {
+        protocol: "http",
+        hostname: "192.168.50.121",
+        port: "8000",
+        pathname: "/storage/**",
+      },
     ],
   },
 };

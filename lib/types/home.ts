@@ -41,6 +41,11 @@ export type CategoryDTO = {
   created_at: string;
   updated_at: string;
 };
+export type ImageDTO = {
+  id: number;
+  url: string;
+};
+
 
 export type ProductDTO = {
   id: string;
@@ -52,7 +57,7 @@ export type ProductDTO = {
   orders_count: number;
   colors: string[];
   sizes: number[];
-  images: string[];
+  images: ImageDTO[];       
   videos: string[];
   categories?: CategoryDTO[]; // ✅ جديد لأن search بيرجع categories داخل المنتج
 };

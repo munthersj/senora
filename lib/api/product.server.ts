@@ -8,7 +8,7 @@ import { serverGetJSON } from "./serverFetch";
 
 export async function fetchProductsPageServer(
   params?: { page?: number; per_page?: number; q?: string },
-  revalidateSeconds = 1800
+  revalidateSeconds = 60
 ) {
   const page = params?.page ?? 1;
   const per_page = params?.per_page ?? 15;
@@ -22,6 +22,7 @@ export async function fetchProductsPageServer(
     },
     revalidate: revalidateSeconds,
     tags: ["products"],
+    
   });
 }
 
@@ -35,14 +36,15 @@ export async function fetchCategoriesServer(revalidateSeconds = 3600) {
 
 export async function fetchProductByIdServer(
   id: string,
-  revalidateSeconds = 3600
+  
 ) {
   const res = await serverGetJSON<{ data: ProductDTO }>(
     `/products/${encodeURIComponent(id)}`,
     {
-      revalidate: revalidateSeconds,
-      tags: ["products", `product:${id}`],
+       init: { cache: "no-store" },
+     
     }
   );
+  console.log(res.data)
   return res.data;
 }

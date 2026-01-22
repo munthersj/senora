@@ -19,10 +19,8 @@ function toUIProduct(dto: ProductDTO): Product {
     price: dto.price,
     currency: "USD", // أو "AED" حسب مشروعك
     description: dto.description ?? "",
-    images:
-      dto.images && dto.images.length > 0
-        ? dto.images
-        : ["/products/dress-2.svg"],
+    images: dto.images,
+
     category: "فساتين", // قيمة افتراضية (UI قد لا يستخدمها هنا)
     tags: dto.colors?.length ? dto.colors.slice(0, 6) : ["رائج الآن"], // بدل tags
     details: [
@@ -51,7 +49,7 @@ export default function SelectedRingShowcase({
 }) {
   const items = useMemo(
     () => products.slice(0, 8).map(toUIProduct),
-    [products]
+    [products],
   );
 
   const n = items.length;
@@ -160,7 +158,7 @@ export default function SelectedRingShowcase({
                   <div
                     className={cn(
                       "ring-card-inner relative h-full w-full overflow-hidden rounded-[30px] border border-black/10 bg-white shadow-soft",
-                      d === 0 ? "ring-1 ring-brandGold/35" : ""
+                      d === 0 ? "ring-1 ring-brandGold/35" : "",
                     )}
                     data-bump={d === 0 ? bump : undefined}
                     style={
@@ -176,7 +174,7 @@ export default function SelectedRingShowcase({
                   >
                     <div className="relative h-full w-full overflow-hidden rounded-[28px]">
                       <Image
-                        src={item.images[0]}
+                        src={item.images[0]?.url}
                         alt={item.name}
                         fill
                         sizes="(max-width: 768px) 230px, 260px"
@@ -223,7 +221,7 @@ export default function SelectedRingShowcase({
                     "h-2.5 w-2.5 rounded-full transition",
                     i === active
                       ? "w-10 bg-brandGold/70"
-                      : "bg-black/15 hover:bg-black/25"
+                      : "bg-black/15 hover:bg-black/25",
                   )}
                   aria-label={`اذهب إلى ${i + 1}`}
                 />

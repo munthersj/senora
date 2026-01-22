@@ -7,10 +7,10 @@ const FALLBACK = "/products/abaya-1.svg";
 export default function ProductCard({ product }: { product: Product }) {
   const img =
     Array.isArray(product.images) && product.images.length > 0
-      ? product.images[0]
+      ? product.images[0].url
       : "";
 
-  const src = img ? img : FALLBACK;
+  const src = img;
 
   return (
     <Link

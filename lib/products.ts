@@ -1,11 +1,14 @@
 
-
+export type ImageDTO = {
+  id: number;
+  url: string;
+};
 export type Product = {
   id: string;
   name: string;
   price: number;
   currency: string;
-  images: string[]; // paths inside /public
+  images: ImageDTO[]; // paths inside /public
   category: string;
   tags: string[];
   topSeller?: boolean;
