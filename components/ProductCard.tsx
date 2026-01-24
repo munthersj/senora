@@ -81,7 +81,7 @@ export default function ProductCard({ product }: { product: Product }) {
 
         {/* tags: حافظ على مساحة ثابتة حتى ما تتفاوت الكروت */}
         <div className="mt-2 flex min-h-[28px] flex-wrap gap-2">
-          {(product.tags ?? []).slice(0, 2).map((t) => (
+          {(product.colors ?? []).slice(0, 2).map((t) => (
             <span
               key={t}
               className="
@@ -95,7 +95,7 @@ export default function ProductCard({ product }: { product: Product }) {
             </span>
           ))}
 
-            {product.tags.length-2>0?`+${product.tags.length-2}`:""}
+          {product.colors.length - 2 > 0 ? `+${product.colors.length - 2}` : ""}
         </div>
       </div>
     </Link>

@@ -70,7 +70,8 @@ export default function WhatsAppOrderButton({
 
   const wholesaleAt = Number(settings?.wholesale_at || 0);
   const wholesaleIfOrder = wholesaleAt > 0 ? qty >= wholesaleAt : false;
-  const wholesaleIfAddedToCart = wholesaleAt > 0 ? count + qty >= wholesaleAt : false;
+  const wholesaleIfAddedToCart =
+    wholesaleAt > 0 ? count + qty >= wholesaleAt : false;
   const isWholesaleNotice = wholesaleIfOrder || wholesaleIfAddedToCart;
 
   useEffect(() => setMounted(true), []);
@@ -92,7 +93,7 @@ export default function WhatsAppOrderButton({
 
   const productUrl = useMemo(
     () => buildProductUrl(siteUrl, product),
-    [siteUrl, product]
+    [siteUrl, product],
   );
 
   const canSubmit = useMemo(() => {
@@ -148,7 +149,7 @@ export default function WhatsAppOrderButton({
     lines.push(`• الكمية: ${qty}`);
     if (isWholesaleNotice && wholesaleAt > 0) {
       lines.push(
-        `• ملاحظة: تم الوصول لحد الجملة (${wholesaleAt}) — سيتم الاتفاق على سعر الجملة عند الطلب.`
+        `• ملاحظة: تم الوصول لحد الجملة (${wholesaleAt}) — سيتم الاتفاق على سعر الجملة عند الطلب.`,
       );
     }
     if (note.trim()) lines.push(`• ملاحظة: ${note.trim()}`);
@@ -321,12 +322,32 @@ export default function WhatsAppOrderButton({
                   الكمية
                 </label>
                 <input
-                  type="number"
-                  min={1}
-                  value={qty}
-                  onChange={(e) =>
-                    setQty(Math.max(1, Number(e.target.value || 1)))
-                  }
+                  type="text"
+                  inputMode="numeric"
+                  value={qty === 0 ? "" : qty}
+                  onChange={(e) => {
+                    const v = e.target.value;
+
+                    // اسمح بالمسح المؤقت
+                    if (v === "") {
+                      setQty(0); // 0 = حالة مؤقتة فقط
+                      return;
+                    }
+
+                    // أرقام فقط
+                    if (!/^\d+$/.test(v)) return;
+
+                    const num = parseInt(v, 10);
+
+                    // امنع 0 والسالب
+                    if (num < 1) return;
+
+                    setQty(num); // 010 -> 10 تلقائياً
+                  }}
+                  onBlur={() => {
+                    // لو ترك الحقل وهو فاضي
+                    if (qty < 1) setQty(1);
+                  }}
                   className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-black/10"
                 />
               </div>
@@ -346,22 +367,25 @@ export default function WhatsAppOrderButton({
             </div>
 
             {wholesaleAt > 0 && (
-              <div className={[
-                "rounded-2xl p-4 ring-1",
-                isWholesaleNotice
-                  ? "bg-[#004439]/5 ring-[#004439]/10 text-[#004439]"
-                  : "bg-gray-50 ring-black/5 text-gray-700",
-              ].join(" ")}
+              <div
+                className={[
+                  "rounded-2xl p-4 ring-1",
+                  isWholesaleNotice
+                    ? "bg-[#004439]/5 ring-[#004439]/10 text-[#004439]"
+                    : "bg-gray-50 ring-black/5 text-gray-700",
+                ].join(" ")}
               >
                 <div className="text-sm font-semibold">
                   حد سعر الجملة: {wholesaleAt} قطعة
                 </div>
                 <p className="mt-1 text-xs leading-relaxed">
-                  عند وصول مجموع القطع في السلة (أو كمية هذا المنتج) إلى هذا الحد، يصبح السعر سعر جملة وسيتم الاتفاق عليه عند الطلب.
+                  عند وصول مجموع القطع في السلة (أو كمية هذا المنتج) إلى هذا
+                  الحد، يصبح السعر سعر جملة وسيتم الاتفاق عليه عند الطلب.
                 </p>
                 {isWholesaleNotice && (
                   <p className="mt-2 text-xs font-semibold">
-                    ✅ تم الوصول لحد الجملة — سيتم اعتماد سعر الجملة عند التواصل.
+                    ✅ تم الوصول لحد الجملة — سيتم اعتماد سعر الجملة عند
+                    التواصل.
                   </p>
                 )}
               </div>

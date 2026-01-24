@@ -11,14 +11,14 @@ export type Product = {
   currency: string;
   images: ImageDTO[]; // paths inside /public
   categories: CategoryDTO[];
-  tags: string[];
+  colors: string[];
   topSeller?: boolean;
   trending?: boolean;
   description: string;
   details: { label: string; value: string }[];
   options?: {
   sizes?: string[];
-  colors?: { name: string; hex?: string }[];
+  // colors?: { name: string; hex?: string }[];
 };
 
 };

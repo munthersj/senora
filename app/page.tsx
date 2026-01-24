@@ -189,11 +189,11 @@ export default async function HomePage() {
           <Reveal>
             <div className="flex items-end justify-between gap-6">
               <div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-xs font-bold text-brandGreen ring-1 ring-black/5">
+                {/* <div className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-xs font-bold text-brandGreen ring-1 ring-black/5">
                   الأكثر طلباً حالياً
                   <span className="text-black/30">•</span>
                   تحديثات مستمرة
-                </div>
+                </div> */}
                 <h2 className="mt-3 text-2xl font-extrabold text-black/90 md:text-3xl">
                   الأصناف
                 </h2>

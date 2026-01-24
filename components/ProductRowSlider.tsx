@@ -14,14 +14,14 @@ function toUIProduct(dto: ProductDTO): Product {
     description: dto.description ?? "",
     images: dto.images,
     categories: dto.categories,
-    tags: dto.colors?.length ? dto.colors.slice(0, 6) : ["الأكثر مبيعاً"],
+    colors: dto.colors?.length ? dto.colors.slice(0, 6) : ["الأكثر مبيعاً"],
     details: [
       { label: "الطلبات", value: String(dto.orders_count ?? 0) },
       { label: "الزيارات", value: String(dto.visitor ?? 0) },
     ],
     options: {
       sizes: dto.sizes?.map(String) ?? [],
-      colors: dto.colors?.map((name) => ({ name })) ?? [],
+      // colors: dto.colors?.map((name) => ({ name })) ?? [],
     },
     topSeller: true,
     trending: false,
