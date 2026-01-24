@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { ProductDTO } from "@/lib/types/home";
 import type { Product } from "@/lib/products";

@@ -1,8 +1,15 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useCart } from "@/components/cart/CartContext";
+
+import {
+  createOrder,
+  isOrderBadResponse,
+  reorderByKey,
+  type OrderBadResponse,
+} from "@/lib/api/order";
 
 type ProductOptionColor = { name: string; hex?: string };
 
@@ -38,6 +45,15 @@ function buildProductUrl(siteUrl: string, product: ProductWithOptions) {
   return `${base}/products/${product.id}`;
 }
 
+// بديل بسيط عن parseUnavailableProductNames
+function parseUnavailableNames(text?: string) {
+  if (!text) return [];
+  return text
+    .split(/[\n,،]+/g)
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
 export default function WhatsAppOrderButton({
   product,
   whatsappNumber,
@@ -58,6 +74,12 @@ export default function WhatsAppOrderButton({
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
+  // ✅ نفس ستايتات useCartOrderFlow (لكن بدون cart)
+  const [placing, setPlacing] = useState(false);
+  const [badModalOpen, setBadModalOpen] = useState(false);
+  const [bad, setBad] = useState<OrderBadResponse | null>(null);
+  const [reordering, setReordering] = useState(false);
+
   const sizes = product?.options?.sizes ?? [];
   const colors = product?.options?.colors ?? [];
   const hasSizes = sizes.length > 0;
@@ -76,15 +98,15 @@ export default function WhatsAppOrderButton({
 
   useEffect(() => setMounted(true), []);
 
-  // lock body scroll when modal open
+  // lock body scroll when ANY modal open
   useEffect(() => {
-    if (!open) return;
+    if (!open && !badModalOpen) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = prev;
     };
-  }, [open]);
+  }, [open, badModalOpen]);
 
   const imgUrl = useMemo(() => {
     if (absoluteImage) return absoluteImage;
@@ -103,9 +125,65 @@ export default function WhatsAppOrderButton({
     return true;
   }, [hasSizes, hasColors, size, color, qty]);
 
+  const canOrderNow = canSubmit && !placing && !reordering;
+
   function close() {
+    if (placing || reordering) return;
     setOpen(false);
   }
+
+  const openWhatsAppDirect = useCallback(() => {
+    const phone = cleanPhoneNumber(whatsappNumber);
+
+    const lines: string[] = [];
+    lines.push("مرحباً 🌿");
+    lines.push("أريد طلب المنتج التالي:");
+    lines.push("");
+    lines.push(`• الاسم: ${product.name}`);
+
+    if (
+      product.price !== undefined &&
+      product.price !== null &&
+      `${product.price}`.trim() !== ""
+    ) {
+      lines.push(`• السعر: ${product.price}`);
+    }
+
+    if (hasSizes) lines.push(`• المقاس: ${size}`);
+    if (hasColors) lines.push(`• اللون: ${color}`);
+    lines.push(`• الكمية: ${qty}`);
+
+    if (isWholesaleNotice && wholesaleAt > 0) {
+      lines.push(
+        `• ملاحظة: تم الوصول لحد الجملة (${wholesaleAt}) — سيتم الاتفاق على سعر الجملة عند الطلب.`,
+      );
+    }
+
+    if (note.trim()) lines.push(`• ملاحظة: ${note.trim()}`);
+    lines.push("");
+    lines.push(`• رابط المنتج: ${productUrl}`);
+    if (imgUrl) lines.push(`• صورة المنتج: ${imgUrl}`);
+    lines.push("");
+    lines.push("شكراً 🙏");
+
+    const text = encodeURIComponent(lines.join("\n"));
+    const url = `https://wa.me/${phone}?text=${text}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+  }, [
+    whatsappNumber,
+    product.name,
+    product.price,
+    hasSizes,
+    hasColors,
+    size,
+    color,
+    qty,
+    isWholesaleNotice,
+    wholesaleAt,
+    note,
+    productUrl,
+    imgUrl,
+  ]);
 
   function addToCart() {
     if (!canSubmit) return;
@@ -128,42 +206,163 @@ export default function WhatsAppOrderButton({
     close();
   }
 
-  function openWhatsApp() {
-    if (!canSubmit) return;
-    const phone = cleanPhoneNumber(whatsappNumber);
+  // ✅ نفس منطق useCartOrderFlow: createOrder ثم فتح واتساب
+  const placeOrder = useCallback(async () => {
+    if (!canOrderNow) return;
 
-    const lines: string[] = [];
-    lines.push("مرحباً 🌿");
-    lines.push("أريد طلب المنتج التالي:");
-    lines.push("");
-    lines.push(`• الاسم: ${product.name}`);
-    if (
-      product.price !== undefined &&
-      product.price !== null &&
-      `${product.price}`.trim() !== ""
-    ) {
-      lines.push(`• السعر: ${product.price}`);
-    }
-    if (hasSizes) lines.push(`• المقاس: ${size}`);
-    if (hasColors) lines.push(`• اللون: ${color}`);
-    lines.push(`• الكمية: ${qty}`);
-    if (isWholesaleNotice && wholesaleAt > 0) {
-      lines.push(
-        `• ملاحظة: تم الوصول لحد الجملة (${wholesaleAt}) — سيتم الاتفاق على سعر الجملة عند الطلب.`,
-      );
-    }
-    if (note.trim()) lines.push(`• ملاحظة: ${note.trim()}`);
-    lines.push("");
-    lines.push(`• رابط المنتج: ${productUrl}`);
-    if (imgUrl) lines.push(`• صورة المنتج: ${imgUrl}`);
-    lines.push("");
-    lines.push("شكراً 🙏");
+    setPlacing(true);
+    try {
+      // نفس شكل البودي المتوقع من الباك: { data: [{ product_id, count }] }
+      const payload = {
+        data: [
+          {
+            product_id: String(product.id),
+            count: Number(qty) || 1,
+          },
+        ],
+      };
 
-    const text = encodeURIComponent(lines.join("\n"));
-    const url = `https://wa.me/${phone}?text=${text}`;
-    window.open(url, "_blank", "noopener,noreferrer");
-    close();
-  }
+      await createOrder(payload);
+
+      // ✅ نجاح: افتح واتساب
+      openWhatsAppDirect();
+      setOpen(false);
+    } catch (err) {
+      if (isOrderBadResponse(err)) {
+        setBad(err.response.data);
+        setBadModalOpen(true);
+      } else {
+        console.error("Order failed", err);
+        alert("صار خطأ أثناء إرسال الطلب. حاول مرة ثانية.");
+      }
+    } finally {
+      setPlacing(false);
+    }
+  }, [canOrderNow, product.id, qty, openWhatsAppDirect]);
+
+  const closeBadModal = useCallback(() => {
+    if (reordering) return;
+    setBadModalOpen(false);
+  }, [reordering]);
+
+  const continueWithoutUnavailable = useCallback(async () => {
+    if (!bad?.key || reordering) return;
+
+    setReordering(true);
+    try {
+      await reorderByKey(bad.key);
+
+      // بعربة: منفلتر عناصر ونكمل. هون: إذا المنتج نفسه ضمن غير المتاح => ما في شي نكمل فيه
+      const names = parseUnavailableNames(bad.products);
+      const productIsUnavailable =
+        names.length > 0
+          ? names.some(
+              (n) => product.name.includes(n) || n.includes(product.name),
+            )
+          : false;
+
+      if (productIsUnavailable) {
+        alert("هذا المنتج غير متاح حالياً، ما فيك تكمل الطلب بدونه.");
+        setBadModalOpen(false);
+        return;
+      }
+
+      // إذا الباك قال في شي غير متاح لكن منتجنا مو ضمنه، منتابع طبيعي
+      openWhatsAppDirect();
+      setBadModalOpen(false);
+      setOpen(false);
+    } catch (err) {
+      console.error("Reorder failed", err);
+      alert("صار خطأ أثناء متابعة الطلب. حاول مرة ثانية.");
+    } finally {
+      setReordering(false);
+    }
+  }, [bad, reordering, product.name, openWhatsAppDirect]);
+
+  const badModalUi = (
+    <div
+      className={[
+        "fixed inset-0 z-[999999]",
+        "transition-all duration-200",
+        badModalOpen
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none",
+      ].join(" ")}
+      aria-hidden={!badModalOpen}
+    >
+      <div
+        className="absolute inset-0 bg-black/55 backdrop-blur-[6px]"
+        onClick={closeBadModal}
+      />
+
+      <div className="absolute inset-0 flex items-center justify-center p-4">
+        <div className="w-full max-w-lg rounded-3xl bg-white shadow-2xl overflow-hidden">
+          <div className="flex items-start justify-between gap-4 p-5 border-b">
+            <div>
+              <h3 className="text-lg font-bold text-gray-900">مشكلة بالطلب</h3>
+              <p className="mt-1 text-sm text-gray-600">
+                {bad?.message ||
+                  "خطأ في الطلب, المنتجات المذكورة غير متاحة حاليا هل تود الطلب بدونها"}
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={closeBadModal}
+              className="rounded-xl px-3 py-2 text-gray-600 hover:bg-gray-100 transition"
+              aria-label="إغلاق"
+              disabled={reordering}
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="p-5 space-y-4">
+            {bad?.products ? (
+              <div className="rounded-2xl bg-gray-50 p-4 ring-1 ring-black/5">
+                <p className="text-sm font-semibold text-gray-900 mb-2">
+                  المنتجات غير المتاحة:
+                </p>
+                <p className="text-sm text-gray-700 whitespace-pre-line">
+                  {bad.products}
+                </p>
+              </div>
+            ) : null}
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                type="button"
+                onClick={closeBadModal}
+                disabled={reordering}
+                className={[
+                  "w-full sm:flex-1 rounded-2xl px-4 py-3 text-sm font-semibold transition",
+                  reordering
+                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                    : "bg-gray-100 text-gray-800 hover:bg-gray-200",
+                ].join(" ")}
+              >
+                إغلاق
+              </button>
+
+              <button
+                type="button"
+                onClick={continueWithoutUnavailable}
+                disabled={reordering}
+                className={[
+                  "w-full sm:flex-1 rounded-2xl px-4 py-3 text-sm font-semibold transition",
+                  reordering
+                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                    : "bg-[#004439] text-white hover:opacity-90",
+                ].join(" ")}
+              >
+                {reordering ? "جارِ المتابعة..." : "متابعة بدون غير المتاح"}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   const modalUi = (
     <div
@@ -215,6 +414,7 @@ export default function WhatsAppOrderButton({
               onClick={close}
               className="rounded-xl px-3 py-2 text-gray-600 hover:bg-gray-100 transition"
               aria-label="إغلاق"
+              disabled={placing || reordering}
             >
               ✕
             </button>
@@ -328,24 +528,19 @@ export default function WhatsAppOrderButton({
                   onChange={(e) => {
                     const v = e.target.value;
 
-                    // اسمح بالمسح المؤقت
                     if (v === "") {
-                      setQty(0); // 0 = حالة مؤقتة فقط
+                      setQty(0);
                       return;
                     }
 
-                    // أرقام فقط
                     if (!/^\d+$/.test(v)) return;
 
                     const num = parseInt(v, 10);
-
-                    // امنع 0 والسالب
                     if (num < 1) return;
 
-                    setQty(num); // 010 -> 10 تلقائياً
+                    setQty(num);
                   }}
                   onBlur={() => {
-                    // لو ترك الحقل وهو فاضي
                     if (qty < 1) setQty(1);
                   }}
                   className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-black/10"
@@ -395,10 +590,10 @@ export default function WhatsAppOrderButton({
               <button
                 type="button"
                 onClick={addToCart}
-                disabled={!canSubmit}
+                disabled={!canSubmit || placing || reordering}
                 className={[
                   "w-full sm:flex-1 rounded-2xl px-4 py-3 text-sm font-semibold transition",
-                  canSubmit
+                  canSubmit && !placing && !reordering
                     ? "bg-[#e1c254] text-[#004439] hover:opacity-90"
                     : "bg-gray-200 text-gray-500 cursor-not-allowed",
                 ].join(" ")}
@@ -408,16 +603,16 @@ export default function WhatsAppOrderButton({
 
               <button
                 type="button"
-                onClick={openWhatsApp}
-                disabled={!canSubmit}
+                onClick={placeOrder}
+                disabled={!canOrderNow}
                 className={[
                   "w-full sm:flex-1 rounded-2xl px-4 py-3 text-sm font-semibold transition",
-                  canSubmit
+                  canOrderNow
                     ? "bg-[#25D366] text-white hover:opacity-90"
                     : "bg-gray-200 text-gray-500 cursor-not-allowed",
                 ].join(" ")}
               >
-                طلب عبر واتساب
+                {placing ? "جارِ إرسال الطلب..." : "طلب عبر واتساب"}
               </button>
             </div>
 
@@ -449,8 +644,9 @@ export default function WhatsAppOrderButton({
         {buttonText}
       </button>
 
-      {/* ✅ Portal to body => always FULLSCREEN */}
+      {/* ✅ Portals */}
       {mounted && createPortal(modalUi, document.body)}
+      {mounted && createPortal(badModalUi, document.body)}
     </>
   );
 }

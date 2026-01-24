@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -112,8 +111,8 @@ export default async function ProductPage({
   // })();
 
   // @ts-ignore
-    // @ts-ignore
-    return (
+  // @ts-ignore
+  return (
     <Container className="py-10">
       <div className="mb-6 text-sm text-black/60">
         <Link href="/" className="hover:text-brandGreen">
@@ -145,9 +144,9 @@ export default async function ProductPage({
         <Reveal delayMs={120}>
           <div>
             <div className="flex flex-wrap gap-2">
-                {(product.category ?? []).map((t) => (
-                    <Badge >{t.name}</Badge>
-                ))}
+              {(product.category ?? []).map((t) => (
+                <Badge>{t.name}</Badge>
+              ))}
             </div>
 
             <h1 className="mt-4 text-3xl font-bold text-black/90">

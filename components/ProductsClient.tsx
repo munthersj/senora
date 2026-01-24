@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState, useRef, useEffect } from "react";
-import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Container from "@/components/Container";
 import ProductGrid from "@/components/ProductGrid";
@@ -43,7 +42,7 @@ export default function ProductsClient({
       },
       ...categories.map((c) => ({ id: c.id, name: c.name, image: c.image })),
     ],
-    [categories]
+    [categories],
   );
 
   const [activeCatId, setActiveCatId] = useState<string>("all");
@@ -117,7 +116,6 @@ export default function ProductsClient({
     if (!container) return;
     container.scrollBy({ left: 400, behavior: "smooth" });
   };
-
 
   async function loadPage(page: number, nextMode: Mode = mode) {
     setLoading(true);
@@ -209,7 +207,7 @@ export default function ProductsClient({
             "absolute left-2 top-1/2 -translate-y-1/2 z-20 h-10 w-10 md:h-12 md:w-12 rounded-full bg-white border-2 shadow-xl flex items-center justify-center transition-all duration-300",
             canScrollLeft
               ? "border-brandGreen/30 text-brandGreen hover:bg-brandGreen hover:text-white hover:scale-110 opacity-100 visible"
-              : "border-gray-200 text-gray-300 opacity-0 invisible"
+              : "border-gray-200 text-gray-300 opacity-0 invisible",
           )}
           aria-label="سكرول لليسار"
         >
@@ -225,7 +223,7 @@ export default function ProductsClient({
             "absolute right-2 top-1/2 -translate-y-1/2 z-20 h-10 w-10 md:h-12 md:w-12 rounded-full bg-white border-2 shadow-xl flex items-center justify-center transition-all duration-300",
             canScrollRight
               ? "border-brandGreen/30 text-brandGreen hover:bg-brandGreen hover:text-white hover:scale-110 opacity-100 visible"
-              : "border-gray-200 text-gray-300 opacity-0 invisible"
+              : "border-gray-200 text-gray-300 opacity-0 invisible",
           )}
           aria-label="سكرول لليمين"
         >
@@ -257,7 +255,7 @@ export default function ProductsClient({
                   "group relative overflow-hidden rounded-2xl transition-all duration-300 flex-shrink-0",
                   isActive
                     ? "ring-4 ring-brandGreen shadow-xl scale-105"
-                    : "hover:scale-105 hover:shadow-lg"
+                    : "hover:scale-105 hover:shadow-lg",
                 )}
               >
                 {/* الصورة - نسبة 4:3 */}
@@ -271,7 +269,7 @@ export default function ProductsClient({
                           "h-full w-full",
                           t.image?.toLowerCase().endsWith(".svg")
                             ? "object-contain p-4"
-                            : "object-cover"
+                            : "object-cover",
                         )}
                       />
                       {/* Overlay */}
@@ -280,7 +278,7 @@ export default function ProductsClient({
                           "absolute inset-0 transition-all duration-300",
                           isActive
                             ? "bg-gradient-to-t from-brandGreen/90 via-brandGreen/50 to-transparent"
-                            : "bg-gradient-to-t from-black/70 via-black/30 to-transparent group-hover:from-brandGreen/80 group-hover:via-brandGreen/40"
+                            : "bg-gradient-to-t from-black/70 via-black/30 to-transparent group-hover:from-brandGreen/80 group-hover:via-brandGreen/40",
                         )}
                       />
                     </>
@@ -290,7 +288,7 @@ export default function ProductsClient({
                         "h-full w-full transition-all",
                         isActive
                           ? "bg-gradient-to-br from-brandGold to-brandGold/80"
-                          : "bg-gradient-to-br from-gray-100 to-gray-200 group-hover:from-brandGreen/20 group-hover:to-brandGreen/10"
+                          : "bg-gradient-to-br from-gray-100 to-gray-200 group-hover:from-brandGreen/20 group-hover:to-brandGreen/10",
                       )}
                     />
                   )}
@@ -302,7 +300,7 @@ export default function ProductsClient({
                         "text-center text-sm font-bold transition-all line-clamp-2",
                         hasImage || isActive
                           ? "text-white drop-shadow-lg"
-                          : "text-gray-700 group-hover:text-brandGreen"
+                          : "text-gray-700 group-hover:text-brandGreen",
                       )}
                     >
                       {t.name}

@@ -2,13 +2,9 @@ import Container from "@/components/Container";
 import AutoMarquee from "@/components/AutoMarquee";
 import Reveal from "@/components/Reveal";
 import { PrimaryButton, SecondaryButton } from "@/components/ui";
-// import { topSellers, trending, products } from "@/lib/products";
-import BestOffers from "@/components/BestOffers";
 import ProductRowSlider from "@/components/ProductRowSlider";
 import SelectedRingShowcase from "@/components/SelectedRingShowcase";
 import { fetchHomeServer } from "@/lib/api/home.server";
-import { normalizePaginated } from "@/lib/utils/pagination";
-import { ProductDTO } from "@/lib/types/home";
 import ProductSliderCat from "@/components/ProductSliderCat";
 import { buildKeywords } from "@/lib/seo/keywords";
 
@@ -72,7 +68,7 @@ export default async function HomePage() {
                 <p className="mt-4 text-base leading-relaxed text-black/65">
                   تصفّح الفساتين والعبايات والأطقم والإكسسوارات. عند اختيارك
                   للقطعة، اضغط
-                  <span className="mx-1 font-semibold text-black/80">
+                  <span className="mx-2 font-semibold text-black/80">
                     شراء عبر واتساب
                   </span>
                   لإرسال رقم المنتج والصورة مباشرة.
