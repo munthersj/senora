@@ -106,12 +106,12 @@ export default function ProductRowSlider({
     <div className={cn("relative", className)}>
       <ArrowBtn
         dir="right"
-        onClick={() => scrollBy(-step)}
+        onClick={() => scrollBy(step)}
         className="hidden md:inline-flex"
       />
       <ArrowBtn
         dir="left"
-        onClick={() => scrollBy(step)}
+        onClick={() => scrollBy(-step)}
         className="hidden md:inline-flex"
       />
 

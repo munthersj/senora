@@ -217,7 +217,7 @@ export default async function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16">
+      <section className="py-8">
         <Container>
           <Reveal>
             <div className="rounded-[32px] border border-black/5 bg-gradient-to-br from-brandGreen to-brandGreen/95 p-8 text-white shadow-soft md:p-12">
@@ -241,7 +241,7 @@ export default async function HomePage() {
           </Reveal>
         </Container>
       </section>
-      <section className="mx-auto max-w-4xl px-4 py-20 text-center">
+      <section className="mx-auto max-w-4xl px-4 py-5 text-center">
         <p className="text-sm sm:text-base text-[#0f3f3a]/75 luxury-text ">
           نؤمن أن الأناقة الحقيقية تكمن في البساطة وجودة التفاصيل، لذلك نحرص على
           تقديم تصاميم تعبّر عنك وتدوم معك.
