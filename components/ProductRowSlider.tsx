@@ -13,8 +13,7 @@ function toUIProduct(dto: ProductDTO): Product {
     currency: "USD", // أو "AED" حسب مشروعك
     description: dto.description ?? "",
     images: dto.images,
-
-    category: "فساتين",
+    categories: dto.categories,
     tags: dto.colors?.length ? dto.colors.slice(0, 6) : ["الأكثر مبيعاً"],
     details: [
       { label: "الطلبات", value: String(dto.orders_count ?? 0) },

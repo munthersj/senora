@@ -1,3 +1,4 @@
+import {CategoryDTO} from "@/lib/types/home";
 
 export type ImageDTO = {
   id: number;
@@ -9,7 +10,7 @@ export type Product = {
   price: number;
   currency: string;
   images: ImageDTO[]; // paths inside /public
-  category: string;
+  categories: CategoryDTO[];
   tags: string[];
   topSeller?: boolean;
   trending?: boolean;

@@ -59,7 +59,7 @@ export type ProductDTO = {
   sizes: number[];
   images: ImageDTO[];       
   videos: string[];
-  categories?: CategoryDTO[]; // ✅ جديد لأن search بيرجع categories داخل المنتج
+  categories: CategoryDTO[]; // ✅ جديد لأن search بيرجع categories داخل المنتج
 };
 
 export type SearchResponse = {

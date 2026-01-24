@@ -53,7 +53,6 @@ export default function ProductCard({ product }: { product: Product }) {
 
         {/* ✅ Badges يمين للـ RTL */}
         <div className="absolute right-3 top-3 z-10 flex flex-wrap gap-2">
-          {product.topSeller && <Badge variant="gold">الأكثر مبيعاً</Badge>}
           {product.trending && <Badge>رائج</Badge>}
         </div>
       </div>
@@ -66,9 +65,11 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
 
         {/* التصنيف */}
-        <div className="text-xs text-black/50 line-clamp-1">
-          {product.category}
-        </div>
+        {/*<div className="text-xs text-black/50 line-clamp-1">*/}
+        {/*    {(product.categories ?? []).map((t) => (*/}
+        {/*        <Badge>{t.name}</Badge>*/}
+        {/*    ))}*/}
+        {/*</div>*/}
 
         {/* السعر */}
         <div className="mt-1 flex items-baseline justify-between">
@@ -93,6 +94,8 @@ export default function ProductCard({ product }: { product: Product }) {
               {t}
             </span>
           ))}
+
+            {product.tags.length-2>0?`+${product.tags.length-2}`:""}
         </div>
       </div>
     </Link>

@@ -233,12 +233,10 @@ export default function AutoMarquee({
                             <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
                                 <span className="inline-flex items-center gap-2 rounded-full bg-white/85 px-4 py-2 text-sm font-semibold text-[#004439]">
                                   <span className="h-2.5 w-2.5 rounded-full bg-[#e1c254]" />
-                                  عروض مميزة
+                                 المضافة حديثاً
                                 </span>
 
-                                <span className="rounded-full bg-[#004439]/90 px-4 py-2 text-sm font-semibold text-white">
-                                  الأكثر طلباً
-                                </span>
+
                             </div>
 
                             <div className="absolute bottom-0 w-full p-5 sm:p-8 lg:p-10">

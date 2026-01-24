@@ -243,14 +243,7 @@ export default function ProductSliderCat({
                 </button>
 
                 {/* Fade Gradients */}
-                <div className={cn(
-                    "absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none transition-opacity",
-                    canScrollRight ? "opacity-100" : "opacity-0"
-                )} />
-                <div className={cn(
-                    "absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none transition-opacity",
-                    canScrollLeft ? "opacity-100" : "opacity-0"
-                )} />
+                {/* Fade Gradients Removed as per user request */}
 
                 {/* Scrollable Container */}
                 <div
@@ -284,7 +277,12 @@ export default function ProductSliderCat({
                                             <img
                                                 src={t.image!}
                                                 alt={t.name}
-                                                className="h-full w-full object-cover"
+                                                className={cn(
+                                                    "h-full w-full",
+                                                    t.image?.toLowerCase().endsWith(".svg")
+                                                        ? "object-contain p-4"
+                                                        : "object-cover"
+                                                )}
                                             />
                                             {/* Overlay */}
                                             <div

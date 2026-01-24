@@ -82,7 +82,7 @@ export default async function ProductPage({
 
     images: dto.images,
 
-    category: "المنتجات",
+    category: dto.categories,
 
     tags: dto.colors ?? [],
 
@@ -111,7 +111,9 @@ export default async function ProductPage({
   //   return `${siteUrl}${img.startsWith("/") ? "" : "/"}${img}`;
   // })();
 
-  return (
+  // @ts-ignore
+    // @ts-ignore
+    return (
     <Container className="py-10">
       <div className="mb-6 text-sm text-black/60">
         <Link href="/" className="hover:text-brandGreen">
@@ -122,7 +124,7 @@ export default async function ProductPage({
           المنتجات
         </Link>
         <span className="mx-2">/</span>
-        <span>{product.id}</span>
+        <span>{product.name}</span>
       </div>
 
       <div className="grid gap-10 lg:grid-cols-2">
@@ -143,7 +145,9 @@ export default async function ProductPage({
         <Reveal delayMs={120}>
           <div>
             <div className="flex flex-wrap gap-2">
-              <Badge>{product.category}</Badge>
+                {(product.category ?? []).map((t) => (
+                    <Badge >{t.name}</Badge>
+                ))}
             </div>
 
             <h1 className="mt-4 text-3xl font-bold text-black/90">
