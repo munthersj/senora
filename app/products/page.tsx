@@ -43,4 +43,4 @@ export default async function ProductsPage() {
 }
 
 // ISR: regenerate this page every 30 minutes
-export const revalidate = 1800;
+// export const revalidate = 1800;

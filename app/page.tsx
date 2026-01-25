@@ -249,4 +249,4 @@ export default async function HomePage() {
 }
 
 // ISR: regenerate this page every 15 minutes
-export const revalidate = 900;
+// export const revalidate = 900;
