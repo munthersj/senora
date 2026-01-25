@@ -7,6 +7,7 @@ import SelectedRingShowcase from "@/components/SelectedRingShowcase";
 import { fetchHomeServer } from "@/lib/api/home.server";
 import ProductSliderCat from "@/components/ProductSliderCat";
 import { buildKeywords } from "@/lib/seo/keywords";
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
   const siteName = "سينيورة";

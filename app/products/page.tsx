@@ -4,6 +4,7 @@ import {
   fetchCategoriesServer,
 } from "@/lib/api/product.server";
 import { buildKeywords } from "@/lib/seo/keywords";
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
   const siteName = "سينيورة";

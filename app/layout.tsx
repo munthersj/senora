@@ -16,6 +16,9 @@ const cairo = Cairo({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://your-domain.com",
+  ),
   title: {
     default: "سينيورة",
     template: "%s | سينيورة",
