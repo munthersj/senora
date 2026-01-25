@@ -60,6 +60,6 @@ export async function fetchCategoryProductsPage(
       },
     }
   );
-console.log(res)
+
   return res.data;
 }

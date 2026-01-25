@@ -45,6 +45,6 @@ export async function fetchProductByIdServer(
      
     }
   );
-  console.log(res.data)
+
   return res.data;
 }
