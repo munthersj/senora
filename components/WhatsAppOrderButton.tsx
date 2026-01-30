@@ -136,7 +136,7 @@ export default function WhatsAppOrderButton({
     const phone = cleanPhoneNumber(whatsappNumber);
 
     const lines: string[] = [];
-    lines.push("مرحباً 🌿");
+    lines.push("مرحباً");
     lines.push("أريد طلب المنتج التالي:");
     lines.push("");
     lines.push(`• الاسم: ${product.name}`);
@@ -164,7 +164,7 @@ export default function WhatsAppOrderButton({
     lines.push(`• رابط المنتج: ${productUrl}`);
     if (imgUrl) lines.push(`• صورة المنتج: ${imgUrl}`);
     lines.push("");
-    lines.push("شكراً 🙏");
+    lines.push("شكراً");
 
     const text = encodeURIComponent(lines.join("\n"));
     const url = `https://wa.me/${phone}?text=${text}`;
@@ -295,8 +295,8 @@ export default function WhatsAppOrderButton({
         onClick={closeBadModal}
       />
 
-      <div className="absolute inset-0 flex items-center justify-center p-4">
-        <div className="w-full max-w-lg rounded-3xl bg-white shadow-2xl overflow-hidden">
+      <div className="absolute inset-0 overflow-y-auto px-4 pt-[max(16px,env(safe-area-inset-top))] pb-[max(16px,env(safe-area-inset-bottom))] sm:flex sm:items-center sm:justify-center sm:p-4">
+        <div className="w-full max-w-lg rounded-3xl bg-white shadow-2xl overflow-hidden max-h-[calc(100dvh-24px)]">
           <div className="flex items-start justify-between gap-4 p-5 border-b">
             <div>
               <h3 className="text-lg font-bold text-gray-900">مشكلة بالطلب</h3>
@@ -317,7 +317,7 @@ export default function WhatsAppOrderButton({
             </button>
           </div>
 
-          <div className="p-5 space-y-4">
+          <div className="p-5 space-y-4 overflow-y-auto max-h-[calc(100dvh-24px-88px)]">
             {bad?.products ? (
               <div className="rounded-2xl bg-gray-50 p-4 ring-1 ring-black/5">
                 <p className="text-sm font-semibold text-gray-900 mb-2">
@@ -387,7 +387,18 @@ export default function WhatsAppOrderButton({
       />
 
       {/* centered modal */}
-      <div className="absolute inset-0 flex items-center justify-center p-4">
+      <div
+        className={[
+          "absolute inset-0",
+          // على الموبايل: خلّي الحاوية قابلة للسكرول + safe area
+          "overflow-y-auto",
+          "px-4",
+          "pt-[max(16px,env(safe-area-inset-top))]",
+          "pb-[max(16px,env(safe-area-inset-bottom))]",
+          // على الديسكتوب: يرجع سنتر
+          "sm:flex sm:items-center sm:justify-center sm:p-4",
+        ].join(" ")}
+      >
         <div
           className={[
             "w-full max-w-lg rounded-3xl bg-white shadow-2xl overflow-hidden",
@@ -395,6 +406,10 @@ export default function WhatsAppOrderButton({
             open
               ? "scale-100 translate-y-0 opacity-100"
               : "scale-95 translate-y-2 opacity-0",
+
+            // ✅ أهم سطرين للموبايل:
+            // خليه ياخد أقصى ارتفاع مناسب للشاشة (dvh أفضل من vh على الموبايل)
+            "max-h-[calc(100dvh-24px)] sm:max-h-none",
           ].join(" ")}
           role="dialog"
           aria-modal="true"
@@ -420,7 +435,7 @@ export default function WhatsAppOrderButton({
             </button>
           </div>
 
-          <div className="p-5 space-y-4">
+          <div className="p-5 space-y-4 overflow-y-auto max-h-[calc(100dvh-24px-98px)] sm:max-h-none">
             <div className="rounded-2xl bg-gray-50 p-4 ring-1 ring-black/5">
               <div className="flex items-center justify-between gap-3">
                 <div className="min-w-0">

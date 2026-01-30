@@ -41,7 +41,7 @@ export function buildCartWhatsAppUrl(opts: {
 
   const items = opts.items;
   const lines: string[] = [];
-  lines.push("مرحباً 🌿");
+  lines.push("مرحباً ");
   lines.push("أريد تأكيد طلب السلة التالية:");
   lines.push("");
 
@@ -69,7 +69,7 @@ export function buildCartWhatsAppUrl(opts: {
   }
 
   lines.push("");
-  lines.push("شكراً 🙏");
+  lines.push("شكراً ");
 
   const text = encodeURIComponent(lines.join("\n"));
   return `https://wa.me/${phone}?text=${text}`;

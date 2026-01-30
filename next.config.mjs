@@ -8,6 +8,11 @@ const nextConfig = {
         port: "8000",
         pathname: "/storage/**",
       },
+      {
+        protocol: "https",
+        hostname: "api.senora-boutique.com",
+        pathname: "/storage/**",
+      },
     ],
   },
 };

@@ -104,7 +104,7 @@ export function CartProvider({
 
     const setQty = (key: string, qty: number) =>
       setItems((prev) =>
-        prev.map((x) => (x.key === key ? { ...x, qty: Math.max(1, qty) } : x))
+        prev.map((x) => (x.key === key ? { ...x, qty: Math.max(1, qty) } : x)),
       );
 
     const clear = () => setItems([]);
@@ -130,7 +130,7 @@ export function CartProvider({
       clear,
       count,
       subtotal,
-      currencyLabel: "ل.س",
+      currencyLabel: "USD",
       settings,
       isWholesale,
       origin,

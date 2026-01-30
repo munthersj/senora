@@ -10,7 +10,7 @@ import ProductImageCarousel from "@/components/ProductImageCarousel";
 import { fetchProductByIdServer } from "@/lib/api/product.server";
 import { fetchSettingsServer } from "@/lib/api/settings.server";
 import { buildKeywords } from "@/lib/seo/keywords";
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+const siteUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const siteName = "سينيورة";
