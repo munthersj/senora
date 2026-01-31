@@ -249,9 +249,9 @@ export default function SelectedRingShowcase({
                         priority={d === 0}
                       />
                       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
-                      <div className="absolute top-3 left-3 text-[11px] font-extrabold text-white/80">
+                      {/* <div className="absolute top-3 left-3 text-[11px] font-extrabold text-white/80">
                         item #{String(i + 1).padStart(2, "0")}
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </button>
