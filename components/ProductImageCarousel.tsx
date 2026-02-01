@@ -62,7 +62,7 @@ export default function ProductImageCarousel({
               aria-label="Previous image"
               className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-white/90 px-3 py-2 text-lg font-bold text-black/70 shadow hover:bg-white"
             >
-              ‹
+              ›
             </button>
 
             <button
@@ -71,7 +71,7 @@ export default function ProductImageCarousel({
               aria-label="Next image"
               className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-white/90 px-3 py-2 text-lg font-bold text-black/70 shadow hover:bg-white"
             >
-              ›
+              ‹
             </button>
           </>
         )}
