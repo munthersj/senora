@@ -146,7 +146,7 @@ export default function WhatsAppOrderButton({
       product.price !== null &&
       `${product.price}`.trim() !== ""
     ) {
-      lines.push(`• السعر: ${product.price}`);
+      lines.push(`• السعر: ${product.price}$`);
     }
 
     if (hasSizes) lines.push(`• المقاس: ${size}`);

@@ -50,7 +50,7 @@ export function buildCartWhatsAppUrl(opts: {
   } else {
     items.forEach((it, i) => {
       lines.push(`${i + 1}) ${it.name}`);
-      if (it.price) lines.push(`   - السعر: ${it.price}`);
+      if (it.price) lines.push(`   - السعر: ${it.price}$`);
       if (it.size) lines.push(`   - المقاس: ${it.size}`);
       if (it.color) lines.push(`   - اللون: ${it.color}`);
       lines.push(`   - الكمية: ${it.qty}`);
