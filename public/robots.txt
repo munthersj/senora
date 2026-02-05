@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://senora-boutique.com/sitemap.xml
