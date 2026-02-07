@@ -9,6 +9,7 @@ import DesktopCartLayout from "@/components/cart/DesktopCartLayout";
 import { CartProvider } from "@/components/cart/CartContext";
 import CartDrawer from "@/components/cart/CartDrawer";
 import { fetchSettingsServer } from "@/lib/api/settings.server";
+import Script from "next/script";
 const cairo = Cairo({
   subsets: ["arabic", "latin"],
   weight: ["300", "400", "500", "600", "700"],
@@ -17,26 +18,27 @@ const cairo = Cairo({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://senora-boutique.com"),
+
   title: {
-    default: "سينيورة",
-    template: "%s | سينيورة",
+    default: "سينيورة بوتيك",
+    template: "%s | سينيورة بوتيك",
   },
+
   description:
-    "سينيورة — محل فساتين سهرة وأقمشة وملابس سهرة في دمشق (الميدان). تفصيل حسب الطلب وبيع جملة ومفرق.",
+    "سينيورة بوتيك — متجر أزياء نسائية وفساتين سهرة وأقمشة في دمشق (الميدان). تفصيل حسب الطلب وبيع جملة ومفرق.",
 
-  applicationName: "سينيورة",
+  applicationName: "سينيورة بوتيك",
 
+  openGraph: {
+    title: "سينيورة بوتيك",
+    siteName: "سينيورة بوتيك",
+    description: "متجر أزياء نسائية وفساتين سهرة وأقمشة في دمشق (الميدان).",
+    url: "https://senora-boutique.com",
+    locale: "ar_SY",
+  },
   icons: {
     icon: "/logo.png",
   },
-  openGraph: {
-    title: "سينيورة",
-    siteName: "سينيورة",
-    description:
-      "سينيورة — محل فساتين سهرة وأقمشة وملابس سهرة في دمشق (الميدان). تفصيل حسب الطلب وبيع جملة ومفرق.",
-    images: ["/logo.png"],
-  },
-
   twitter: {
     card: "summary_large_image",
     title: "سينيورة",
@@ -58,6 +60,20 @@ export default async function RootLayout({
   const whatsappNumber = settings.whatsapp;
   return (
     <html lang="ar" dir="rtl">
+      <Script
+        id="site-name"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "Senora Boutique",
+            alternateName: "Senora",
+            url: "https://senora-boutique.com",
+          }),
+        }}
+      />
       <body
         className={cn(
           cairo.className,
